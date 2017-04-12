@@ -70,9 +70,9 @@
                                 </cells>
                             </collectionView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dIB-0g-1EK">
-                                <rect key="frame" x="26" y="33" width="56" height="30"/>
+                                <rect key="frame" x="26" y="33" width="44" height="30"/>
                                 <fontDescription key="fontDescription" name="ArialHebrew-Bold" family="Arial Hebrew" pointSize="17"/>
-                                <state key="normal" title="START"/>
+                                <state key="normal" title="PLAY"/>
                                 <connections>
                                     <action selector="onStartGame:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ysz-e1-iVs"/>
                                 </connections>
