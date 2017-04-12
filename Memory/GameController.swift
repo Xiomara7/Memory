@@ -8,6 +8,12 @@ import AFNetworking
 class GameController: UIViewController {
 
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var timer: UILabel!
+
+    var counter = 0
+    var time = Timer()
+    
+    fileprivate let sectionInsets = UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0)
     
     let game = MemoryGame()
     var cards = [Card]()
@@ -19,15 +25,16 @@ class GameController: UIViewController {
         
         collectionView.dataSource = self
         collectionView.delegate = self
+        collectionView.isHidden = true
         
-        APIClient.shared.getCardImages(success: { (cards) in
-            self.cards = cards
-            self.setupNewGame()
-    
+        APIClient.shared.getCardImages { (cardsArray, error) in
+            if let _ = error {
+                // show alert
+            }
             
-        }, failure: { (error) in
-            print(error)
-        })
+            self.cards = cardsArray!
+            self.setupNewGame()
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -47,6 +54,19 @@ class GameController: UIViewController {
         game.stopGame()
         setupNewGame()
     }
+    
+    @IBAction func onStartGame(_ sender: Any) {
+        collectionView.isHidden = false
+        
+        time.invalidate()
+        time = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
+    }
+    
+    func timerAction() {
+        counter += 1
+        timer.text = "0:\(counter)"
+    }
+    
 }
 
 // MARK: - CollectionView Delegate Methods
@@ -109,36 +129,36 @@ extension GameController: MemoryGameProtocol {
             message: defaultAlertMessage,
             preferredStyle: .alert)
         
-        let cancelAction = UIAlertAction(title: "Dismiss", style: .cancel) { [weak self] (action) in
+        let cancelAction = UIAlertAction(title: "Nah", style: .cancel) { [weak self] (action) in
+            self?.collectionView.isHidden = true
+        }
+        let playAgainAction = UIAlertAction(title: "Dale!", style: .default) { [weak self] (action) in
             self?.resetGame()
         }
+        
         alertController.addAction(cancelAction)
+        alertController.addAction(playAgainAction)
         
         self.present(alertController, animated: true) { }
     }
 }
 
-extension GameController {
+extension GameController: UICollectionViewDelegateFlowLayout {
     
     // Collection view flow layout setup
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        let screenSize = UIScreen.main.bounds
-        let screenWidth = screenSize.width
-        let cellSquareSize: CGFloat = screenWidth / 4.0 - 30.0
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let paddingSpace = Int(sectionInsets.left) * 4
+        let availableWidth = Int(view.frame.width) - paddingSpace
+        let widthPerItem = availableWidth / 4
         
-        return CGSize(width: cellSquareSize, height: cellSquareSize);
+        return CGSize(width: widthPerItem, height: widthPerItem)
     }
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
-        return UIEdgeInsetsMake(0, 0, 0.0, 0.0)
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return sectionInsets
     }
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
-        return 0.0
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return sectionInsets.left
     }
-    
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
-        return 0.0
-    }
-    
 }

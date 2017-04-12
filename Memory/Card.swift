@@ -3,26 +3,28 @@
 //  Memory
 
 import UIKit
+import SwiftyJSON
 
 class Card {
 
     // MARK: - Properties
     
-    var id: Int
+    var id: String
     var shown: Bool = false
-    var artworkURL = String()
+    var artworkURL: UIImage!
     
     static var allCards = [Card]()
-    
-    init(ID: Int, artworkURL: String) {
-        self.id = ID
-        self.artworkURL = artworkURL
-    }
 
     init(card: Card) {
         self.id = card.id
         self.shown = card.shown
         self.artworkURL = card.artworkURL
+    }
+    
+    init(image: UIImage) {
+        self.artworkURL = image
+        self.shown = false
+        self.id = NSUUID().uuidString
     }
     
     // MARK: - Methods
@@ -31,29 +33,8 @@ class Card {
         return (card.id == id)
     }
     
-    /**
-     Parse response from API to get the artworks for a set of tracks.
-     - Parameter dictionary: response dictionary from API.
-     - Returns: An array of **Card** instances.
-     */
-    class func cardsWithArray(dictionary: [[String:Any]]) -> [Card] {
-        var cards = [Card]()
-        
-        for dict in dictionary {
-            if cards.count < defaultGridSize {
-                guard let artworkURL = dict[keyArtworkURL] as? String else { return cards }
-                guard let cardID = dict[keyID] as? Int else { return cards }
-                
-                let card = Card(ID: cardID, artworkURL: artworkURL)
-                let copy = Card(ID: cardID, artworkURL: artworkURL)
-        
-                cards.append(card)
-                cards.append(copy)
-            }
-        }
-        
-        allCards = cards
-        return cards
+    func copy() -> Card {
+        return Card(card: self)
     }
 }
 

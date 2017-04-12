@@ -29,7 +29,7 @@ class MemoryGame {
     func newGame(cardsArray:[Card]) -> [Card] {
         cards = shuffleCards(cards: cardsArray)
         isPlaying = true
-
+    
         delegate?.memoryGameDidStart(self)
         
         return cards

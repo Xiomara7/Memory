@@ -3,43 +3,46 @@
 //  Memory
 
 import Foundation
-import BDBOAuth1Manager
+import AFNetworking
+import SwiftyJSON
 
-class APIClient: BDBOAuth1SessionManager {
+typealias CardsArray = [Card]
+
+// MARK: - APIClient
+class APIClient: AFHTTPSessionManager {
     
     struct URLHosts {
-        static let prod = "http://api.soundcloud.com/"
-        static let dev = "http://api.soundcloud.com/playlists/79670980?client_id=\(Config.clientID)"
-    }
-    
-    struct Config {
-        static let clientID = "aa45989bb0c262788e2d11f1ea041b65"
-        
-        #if DEBUG
-            static let URLString = URLHosts.dev
-        #else
-            static let URLString = URLHosts.prod
-        #endif
+        static let baseURL = "https://source.unsplash.com/"
+        static let random = "random/"
+        static let category = "category/"
     }
     
     static let shared = APIClient()
     
-    /**
-     
-     - Returns: One of two completion blocks: sucess or failure.
-     - success: If successful, returns a list of cards.
-     - failure: If it fails, returns the error.
-     */
-    func getCardImages(success:@escaping ([Card]) -> (), failure:@escaping (Error) ->()) {
-        get(Config.URLString, parameters: nil, progress: nil, success: {(_, response) in
+    
+    static var defaultCardImages:[UIImage] = [
+        UIImage(named: "1")!,
+        UIImage(named: "2")!,
+        UIImage(named: "3")!,
+        UIImage(named: "4")!,
+        UIImage(named: "5")!,
+        UIImage(named: "6")!,
+        UIImage(named: "7")!,
+        UIImage(named: "8")!
+    ];
+    
+    func getCardImages(completion: ((CardsArray?, Error?) -> ())?) {
+        var cards = CardsArray()
+        let cardImages = APIClient.defaultCardImages
+        
+        for image in cardImages {
+            let card = Card(image: image)
+            let copy = card.copy()
             
-            let dict = response as! [String:Any]
-            let cards = Card.cardsWithArray(dictionary: dict[keyTracks] as! [[String : Any]])
-            
-            success(cards)
-            
-        }) {(_, error) in
-            failure(error)
+            cards.append(card)
+            cards.append(copy)
         }
+        
+        completion!(cards, nil)
     }
 }

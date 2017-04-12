@@ -14,20 +14,20 @@ class CardCell: UICollectionViewCell {
     var card: Card? {
         didSet {
             guard let card = card else { return }
-            frontImageView.setImageWith(URL(string: card.artworkURL)!)
+            frontImageView.image = card.artworkURL
+            
+            frontImageView.layer.cornerRadius = 5.0
+            backImageView.layer.cornerRadius = 5.0
+            
+            frontImageView.layer.masksToBounds = true
+            backImageView.layer.masksToBounds = true
         }
     }
     
     var shown: Bool = false
     
     // MARK: - Methods
-    override func layoutSubviews() {
-        contentView.layer.cornerRadius = 8
-        contentView.layer.borderWidth = 1.0
-        contentView.layer.masksToBounds = true
-        contentView.layer.borderColor = UIColor.clear.cgColor
-    }
-    
+
     func showCard(_ show: Bool, animted: Bool) {
         frontImageView.isHidden = false
         backImageView.isHidden = false
@@ -35,18 +35,20 @@ class CardCell: UICollectionViewCell {
         
         if animted {
             if show {
-                UIView.transition(from: backImageView,
-                                  to: frontImageView,
-                                  duration: 0.5,
-                                  options: [.transitionFlipFromRight, .showHideTransitionViews],
-                                  completion: { (finished: Bool) -> () in
+                UIView.transition(
+                    from: backImageView,
+                    to: frontImageView,
+                    duration: 0.5,
+                    options: [.transitionFlipFromRight, .showHideTransitionViews],
+                    completion: { (finished: Bool) -> () in
                 })
             } else {
-                UIView.transition(from: frontImageView,
-                                  to: backImageView,
-                                  duration: 0.5,
-                                  options: [.transitionFlipFromRight, .showHideTransitionViews],
-                                  completion:  { (finished: Bool) -> () in
+                UIView.transition(
+                    from: frontImageView,
+                    to: backImageView,
+                    duration: 0.5,
+                    options: [.transitionFlipFromRight, .showHideTransitionViews],
+                    completion:  { (finished: Bool) -> () in
                 })
             }
         } else {

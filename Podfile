@@ -5,6 +5,6 @@ use_frameworks!
 target 'Memory' do
   
   pod 'AFNetworking'
-  pod 'BDBOAuth1Manager'
+  pod 'SwiftyJSON'
   
 end
