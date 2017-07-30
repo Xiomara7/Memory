@@ -1,8 +1,5 @@
 # Memory card game
 
-### Video Walkthrough:
-![memory_game](https://cloud.githubusercontent.com/assets/3449724/22321265/2b2e3e68-e348-11e6-9a5b-2231d429cad1.gif)
-
 ### Dependencies:
 This project uses cocoapods as a package managment system to install its dependencies.
 
