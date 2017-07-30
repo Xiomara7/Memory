@@ -58,15 +58,23 @@ class GameController: UIViewController {
     @IBAction func onStartGame(_ sender: Any) {
         collectionView.isHidden = false
         
+        counter = 0
+        timer.text = "0:00"
+        
         time.invalidate()
-        time = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
+        time = Timer.scheduledTimer(
+            timeInterval: 1.0,
+            target: self,
+            selector: #selector(timerAction),
+            userInfo: nil,
+            repeats: true
+        )
     }
     
     func timerAction() {
         counter += 1
         timer.text = "0:\(counter)"
     }
-    
 }
 
 // MARK: - CollectionView Delegate Methods
@@ -124,6 +132,8 @@ extension GameController: MemoryGameProtocol {
     }
     
     func memoryGameDidEnd(_ game: MemoryGame) {
+        time.invalidate()
+        
         let alertController = UIAlertController(
             title: defaultAlertTitle,
             message: defaultAlertMessage,
@@ -133,6 +143,7 @@ extension GameController: MemoryGameProtocol {
             self?.collectionView.isHidden = true
         }
         let playAgainAction = UIAlertAction(title: "Dale!", style: .default) { [weak self] (action) in
+            self?.collectionView.isHidden = true
             self?.resetGame()
         }
         
@@ -140,6 +151,8 @@ extension GameController: MemoryGameProtocol {
         alertController.addAction(playAgainAction)
         
         self.present(alertController, animated: true) { }
+        
+        resetGame()
     }
 }
 

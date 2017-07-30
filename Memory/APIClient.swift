@@ -19,7 +19,6 @@ class APIClient: AFHTTPSessionManager {
     
     static let shared = APIClient()
     
-    
     static var defaultCardImages:[UIImage] = [
         UIImage(named: "1")!,
         UIImage(named: "2")!,
