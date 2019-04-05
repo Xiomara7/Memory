@@ -71,7 +71,7 @@ class GameController: UIViewController {
         )
     }
     
-    func timerAction() {
+    @objc func timerAction() {
         counter += 1
         timer.text = "0:\(counter)"
     }
