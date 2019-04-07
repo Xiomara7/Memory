@@ -1,4 +1,5 @@
 # Memory card game
+Here's a [tutorial I wrote.](https://medium.com/p/6513f34dd25c)
 
 ### Dependencies:
 This project uses cocoapods as a package managment system to install its dependencies.
