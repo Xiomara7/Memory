@@ -51,7 +51,7 @@ class GameController: UIViewController {
     }
     
     func resetGame() {
-        game.stopGame()
+        game.restartGame()
         setupNewGame()
     }
     

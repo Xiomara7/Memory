@@ -22,9 +22,9 @@ class Card {
     }
     
     init(image: UIImage) {
-        self.artworkURL = image
-        self.shown = false
         self.id = NSUUID().uuidString
+        self.shown = false
+        self.artworkURL = image
     }
     
     // MARK: - Methods

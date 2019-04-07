@@ -7,7 +7,7 @@ import UIKit
 
 // MARK: - MemoryGameProtocol
 protocol MemoryGameProtocol {
-
+    //protocol definition goes here
     func memoryGameDidStart(_ game: MemoryGame)
     func memoryGameDidEnd(_ game: MemoryGame)
     func memoryGame(_ game: MemoryGame, showCards cards: [Card])
@@ -35,7 +35,7 @@ class MemoryGame {
         return cards
     }
     
-    func stopGame() {
+    func restartGame() {
         isPlaying = false
         
         cards.removeAll()
